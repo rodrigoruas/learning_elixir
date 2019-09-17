@@ -22,4 +22,24 @@ defmodule Cards do
     Enum.split(deck, hand_size)
   end
 
+  def save(deck, file_name) do
+    binary = :erlang.term_to_binary(deck)
+    File.write(file_name, binary)
+  end
+
+  def load(file_name) do
+    case File.read(file_name) do
+      {:ok, binary} -> :erlang.binary_to_term binary
+      {:error, _reason} -> "this file does not exist"
+    end
+  end
+
+  def create_hand(hand_size) do
+    Cards.create_deck
+    |> Cards.shuffle
+    |> Cards.deal(hand_size)
+  end
 end
+
+# {hand, rest_of_deck} = Cards.deal(deck,4)
+# [color1] = ["red"]
